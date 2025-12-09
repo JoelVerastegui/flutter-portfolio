@@ -4,10 +4,11 @@ Proyecto web de portafolio Flutter.
 
 ### Comando para generar el build del proyecto
 ```
-flutter build web --base-href /nombre-repo/
+flutter build web --base-href /flutter-portfolio/
 ```
 
-### Comando para copiar archivos del build a docs
+### Comandos para copiar y reemplazar archivos del build a docs
 ```
+rm -rf docs/*
 cp -r build/web/* docs/
 ```
