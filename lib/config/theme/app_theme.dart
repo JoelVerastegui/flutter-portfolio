@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_portfolio/config/constants/app_colors.dart';
 
 class AppTheme {
 
   ThemeData getTheme() => ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+    colorSchemeSeed: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.dark,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.transparent,
+    )
   );
 
 }
