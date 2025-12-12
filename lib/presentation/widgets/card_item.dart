@@ -73,7 +73,7 @@ class _ContentContainer extends StatelessWidget {
             width: 150.0,
             height: 150.0,
             child: Image.asset(
-              'assets/images/app_icon.png',
+              'assets/images/projects/ponte_al_dia_icon.png',
               fit: BoxFit.cover,
             ),
           ),

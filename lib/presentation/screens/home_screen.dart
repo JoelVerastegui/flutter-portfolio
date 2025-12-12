@@ -199,8 +199,10 @@ class _ProjectCardState extends State<_ProjectCard> {
         data: Project(
           title: 'Ponte al dia',
           description: 'App móvil de agenda escolar.',
-          imagePath: '',
-          projectUrl: '',
+          iconPath: '', 
+          shortDescription: '', 
+          keyPoints: '', 
+          sourceUrl: '',
         ),
         delay: const Duration(milliseconds: 100),
         feedback: Material(color: Colors.transparent, child: CardItem(index: index)),
