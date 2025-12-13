@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_portfolio/config/constants/app_colors.dart';
+import 'package:my_portfolio/domain/entities/project.dart';
 
 class CardItem extends StatelessWidget {
 
-  final int index;
+  final Project project;
 
-  const CardItem({
+  const CardItem(this.project, {
     super.key,
-    required this.index,
   });
 
   @override
@@ -39,7 +39,7 @@ class CardItem extends StatelessWidget {
 
           Align(
             alignment: Alignment.center,
-            child: _ContentContainer()
+            child: _ContentContainer(project)
           ),
 
         ],
@@ -49,6 +49,10 @@ class CardItem extends StatelessWidget {
 }
 
 class _ContentContainer extends StatelessWidget {
+
+  final Project project;
+
+  const _ContentContainer(this.project);
 
   @override
   Widget build(BuildContext context) {
@@ -62,24 +66,34 @@ class _ContentContainer extends StatelessWidget {
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'Ponte al día',
+              project.title,
               style: TextStyle(color: AppColors.dark, fontSize: 25.0),
               textAlign: TextAlign.center,
               maxLines: 1,
             ),
           ),
       
-          SizedBox(
+          Container(
+            padding: EdgeInsets.all(25.0),
             width: 150.0,
             height: 150.0,
-            child: Image.asset(
-              'assets/images/projects/ponte_al_dia_icon.png',
-              fit: BoxFit.cover,
+            alignment: Alignment.center,
+            child: AspectRatio(
+              aspectRatio: 1 / 1,
+              child: project.iconPath.isNotEmpty
+                ? ClipRRect(
+                  borderRadius: BorderRadiusGeometry.circular(14.0),
+                  child: Image.asset(
+                    project.iconPath,
+                    fit: BoxFit.cover,
+                  ),
+                )
+                : FlutterLogo(),
             ),
           ),
       
           Text(
-            'App para buscar películas, agregar favoritos y ver la cartelera actual.',
+            project.shortDescription,
             style: TextStyle(color: AppColors.dark),
             textAlign: TextAlign.center,
             maxLines: 3,

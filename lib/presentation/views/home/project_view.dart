@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_portfolio/domain/entities/project.dart';
+import 'package:my_portfolio/config/constants/app_colors.dart';
 
 import 'package:my_portfolio/presentation/widgets/gallery_carousel.dart';
 import 'package:my_portfolio/presentation/widgets/project_info.dart';
@@ -13,55 +13,69 @@ class ProjectView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    // final project = ref.watch(projectProvider);
-    final project = Project(
-      title: 'Ponte al día', 
-      shortDescription: 'App móvil de agenda escolar.',
-      description: 'App de agenda escolar para apuntar y marcar tareas, organizar horario, etc.', 
-      keyPoints: '- Uso de Clean Architechture\n- Patrones de diseño\n- Protección de rutas\n- Uso de JWT para autenticación',
-      iconPath: 'assets/images/projects/ponte_al_dia_icon.png',
-      assets: [
-        'https://www.youtube.com/watch?v=2EwrpXUahUY',
-        'assets/images/projects/ponte_al_dia_1.png',
-        'assets/images/projects/ponte_al_dia_2.png',
-        'assets/images/projects/ponte_al_dia_3.png',
-        'assets/images/projects/ponte_al_dia_4.png',
-        'assets/images/projects/ponte_al_dia_5.png',
-        'assets/images/projects/ponte_al_dia_6.png',
-        'assets/images/projects/ponte_al_dia_7.png',
-        'assets/images/projects/ponte_al_dia_8.png',
-      ],
-      technologies: [
-        Technologic.flutter,
-        Technologic.riverpod,
-        Technologic.isarDB,
-      ],
-      sourceUrl: 'https://github.com/JoelVerastegui',
-    );
+    final project = ref.watch(projectProvider.select((state) => state.project));
+    final isFirstProject = ref.watch(projectProvider.select((state) => state.isFirst));
+    final isLastProject = ref.watch(projectProvider.select((state) => state.isLast));
+    final projectNotifier = ref.read(projectProvider.notifier);
+    final responsiveWidth = 800;
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // if (project == null) {
-        //   return Center(
-        //     child: CircularProgressIndicator(),
-        //   );
-        // }
+        if (project == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         
         return SingleChildScrollView(
-          child: Wrap(
-            alignment: WrapAlignment.start,
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-          
-              GalleryCarousel(assetsPaths: project.assets, maxHeight: constraints.maxHeight,),
-          
-              ProjectInfo(
-                project: project,
-                clearProject: () => ref.invalidate(projectProvider),
-              ),
-          
-            ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 1020.0,
+            ),
+            child: Flex(
+              direction: constraints.maxWidth <= responsiveWidth ? Axis.vertical : Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 20,
+              children: [
+
+                if (constraints.maxWidth > responsiveWidth)
+                Opacity(
+                  opacity: isFirstProject ? 0.5 : 1.0,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios_new, size: 40.0, color: AppColors.blank),
+                    onPressed: isFirstProject ? null : projectNotifier.previousProject,
+                  ),
+                ),
+            
+                if (project.assets.isNotEmpty)
+                GalleryCarousel(assetsPaths: project.assets, maxHeight: constraints.maxHeight,),
+                
+                if (constraints.maxWidth > responsiveWidth)
+                Expanded(
+                  child: ProjectInfo(
+                    project: project,
+                    clearProject: () => ref.invalidate(projectProvider),
+                  ),
+                ),
+            
+                if (constraints.maxWidth <= responsiveWidth)
+                ProjectInfo(
+                  project: project,
+                  clearProject: () => ref.invalidate(projectProvider),
+                ),
+
+                if (constraints.maxWidth > responsiveWidth)
+                Opacity(
+                  opacity: isLastProject ? 0.5 : 1.0,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_forward_ios, size: 40.0, color: AppColors.blank),
+                    onPressed: isLastProject ? null : projectNotifier.nextProject,
+                  ),
+                ),
+            
+              ],
+            ),
           ),
         );
 

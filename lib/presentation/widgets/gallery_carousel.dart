@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-
 import 'package:my_portfolio/config/constants/app_colors.dart';
 
 class GalleryCarousel extends StatefulWidget {
@@ -23,7 +21,6 @@ class GalleryCarousel extends StatefulWidget {
 class GalleryCarouselState extends State<GalleryCarousel> {
 
   final scrollController = ScrollController();
-  late YoutubePlayerController youtubeController;
   Timer? carouselTimer;
   Timer? continueCarouselTimer;
   int selectedIndex = 0;
@@ -33,18 +30,18 @@ class GalleryCarouselState extends State<GalleryCarousel> {
     super.initState();
 
     _galleryCarousel();
+  }
 
-    youtubeController = YoutubePlayerController(
-      params: YoutubePlayerParams(
-        showControls: true,
-        mute: true,
-        strictRelatedVideos: true,
-        origin: Uri.base.origin, // IMPORTANTE EN WEB
-      ),
-    );
-
-    //TODO: No se debe pasar al siguiente asset hasta que haya finalizado el video si se le dio click a reproducir
-    //youtubeController.listen(onData);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    
+    for(final assetPath in widget.assetsPaths) {
+      precacheImage(
+        AssetImage(assetPath), 
+        context
+      );
+    }
   }
 
   @override
@@ -57,10 +54,6 @@ class GalleryCarouselState extends State<GalleryCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.assetsPaths.isEmpty) {
-      return SizedBox();
-    }
-
     return SizedBox(
       width: 300.0,
       child: Column(
@@ -76,9 +69,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
               border: Border.all(color: AppColors.blank, width: 2.0,)
             ),
             child: _AssetViewer(
-              youtubeController: youtubeController, 
               assetUrl: widget.assetsPaths[selectedIndex], 
-              verifyYoutubeUrl: extractYoutubeId,
             ),
           ),
       
@@ -98,7 +89,6 @@ class GalleryCarouselState extends State<GalleryCarousel> {
                     assetUrl: widget.assetsPaths[index], 
                     isAssetSelected: selectedIndex == index, 
                     selectAsset: () => _selectAsset(index),
-                    verifyYoutubeUrl: extractYoutubeId
                   );
               
                 },
@@ -116,28 +106,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
       selectedIndex = (selectedIndex + 1) % widget.assetsPaths.length;
     });
 
-    _updateYoutubeController();
     _ensureItemIsVisible();
-  }
-
-  void _updateYoutubeController() {
-    final ytId = extractYoutubeId(widget.assetsPaths[selectedIndex]);
-
-    if (ytId.isEmpty) return;
-
-    youtubeController.loadVideoById(videoId: ytId);
-  }
-
-  String extractYoutubeId(String url) {
-    if (url.contains('youtu.be/')) {
-      return url.split('youtu.be/')[1].split('?').first;
-    }
-
-    if (url.contains('youtube.com/watch')) {
-      return Uri.parse(url).queryParameters['v'] ?? '';
-    }
-
-    return '';
   }
 
   void _ensureItemIsVisible() {
@@ -158,6 +127,8 @@ class GalleryCarouselState extends State<GalleryCarousel> {
   }
 
   void _galleryCarousel() {
+    if (widget.assetsPaths.isEmpty) return;
+
     carouselTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       _nextAsset();
     });
@@ -179,14 +150,10 @@ class GalleryCarouselState extends State<GalleryCarousel> {
 
 class _AssetViewer extends StatelessWidget {
 
-  final YoutubePlayerController youtubeController;
   final String assetUrl;
-  final String Function(String) verifyYoutubeUrl;
 
   const _AssetViewer({
-    required this.youtubeController,
     required this.assetUrl,
-    required this.verifyYoutubeUrl,
   });
 
   @override
@@ -197,17 +164,19 @@ class _AssetViewer extends StatelessWidget {
         color: AppColors.dark,
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
-          child: verifyYoutubeUrl(assetUrl).isNotEmpty
-            ? YoutubePlayer(
-              controller: youtubeController,
-              aspectRatio: 9 / 16,
-            )
-            : Image.asset(
-              assetUrl,
-              key: ValueKey<String>('asset:$assetUrl'),
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.high,
-            ),
+          child: Image(
+            image: AssetImage(assetUrl),
+            key: ValueKey<String>('asset:$assetUrl'),
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              if (frame == null) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              return child;
+            },
+          ),
         )
       )
     );
@@ -220,13 +189,11 @@ class _AssetCarouselItem extends StatelessWidget {
   final String assetUrl;
   final bool isAssetSelected;
   final Function() selectAsset;
-  final String Function(String) verifyYoutubeUrl;
 
   const _AssetCarouselItem({
     required this.assetUrl, 
     required this.isAssetSelected, 
     required this.selectAsset,
-    required this.verifyYoutubeUrl,
   });
 
   @override
@@ -246,13 +213,18 @@ class _AssetCarouselItem extends StatelessWidget {
           ),
           child: AspectRatio(
             aspectRatio: 9 / 16,
-            child: verifyYoutubeUrl(assetUrl).isEmpty 
-              ? Image.asset(
-                assetUrl,
-                fit: BoxFit.cover,
-                filterQuality: FilterQuality.low,
-              ) 
-              : Placeholder(), //TODO: Agregar la miniatura del video
+            child: Image.asset(
+              assetUrl,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.low,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (frame == null) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                
+                return child;
+              },
+            ),
           ),
         ),
       ),

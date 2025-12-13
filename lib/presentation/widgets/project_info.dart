@@ -17,88 +17,68 @@ class ProjectInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300.0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10.0,
-        children: [
-
-          _ProjectIconTitle(project: project),
-
-          Text(
-            project.shortDescription,
-            style: TextStyle(color: AppColors.blank, fontSize: 16.0),
-          ),
-
-          if (project.description.isNotEmpty)
-          Text(
-            project.description,
-            style: TextStyle(color: AppColors.blank, fontSize: 16.0),
-          ),
-
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10.0,
+      children: [
+    
+        _ProjectIconTitle(project: project),
+    
+        Text(
+          project.shortDescription,
+          style: TextStyle(color: AppColors.blank, fontSize: 16.0),
+        ),
+    
+        if (project.description.isNotEmpty)
+        Text(
+          project.description,
+          style: TextStyle(color: AppColors.blank, fontSize: 16.0),
+        ),
+    
+        SizedBox(height: 5.0),
+    
+        Text(
+          'Tecnologías usadas',
+          style: TextStyle(color: AppColors.blank, fontSize: 20.0),
+        ),
+    
+        _TechnologiesViewer(project.technologies),
+    
+        if (project.keyPoints.isNotEmpty)
+        ...<Widget>[
           SizedBox(height: 5.0),
-
+    
           Text(
-            'Tecnologías usadas',
+            'Puntos clave',
             style: TextStyle(color: AppColors.blank, fontSize: 20.0),
           ),
-
-          _TechnologiesViewer(project.technologies),
-
-          if (project.keyPoints.isNotEmpty)
-          ...<Widget>[
-            SizedBox(height: 5.0),
-
-            Text(
-              'Puntos clave',
-              style: TextStyle(color: AppColors.blank, fontSize: 20.0),
-            ),
-
-            Text(
-              project.keyPoints,
-              style: TextStyle(color: AppColors.blank, fontSize: 16.0),
-            ),
-          ],
-
-          if (project.sourceUrl.isNotEmpty)
-          ...<Widget>[
-            SizedBox(height: 5.0),
-
-            FilledButton.icon(
-              onPressed: () => launch(project.sourceUrl), 
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(AppColors.dark),
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/github.svg',
-                width: 20.0,
-                height: 20.0,
-              ),
-              label: Text('Código fuente', style: TextStyle(color: AppColors.blank)),
-            ),
-          ],
-
+    
+          Text(
+            project.keyPoints,
+            style: TextStyle(color: AppColors.blank, fontSize: 16.0),
+          ),
+        ],
+    
+        if (project.sourceUrl.isNotEmpty || project.videoUrl.isNotEmpty)
+        ...<Widget>[
           SizedBox(height: 5.0),
 
-          TextButton.icon(
-            onPressed: clearProject, 
-            icon: Icon(Icons.style, color: AppColors.blank, size: 20.0),
-            label: Text(
-              'Ver más proyectos',
-              style: TextStyle(color: AppColors.blank, fontSize: 20.0)
-            )
+          _ExternalButtons(
+            sourceUrl: project.sourceUrl,
+            videoUrl: project.videoUrl,
           ),
-
         ],
-      ),
-    );
-  }
-
-  Future<void> launch(String url, {bool isNewTab = true}) async {
-    await launchUrl(
-      Uri.parse(url),
-      webOnlyWindowName: isNewTab ? '_blank' : '_self',
+    
+        TextButton.icon(
+          onPressed: clearProject, 
+          icon: Icon(Icons.style, color: AppColors.blank, size: 20.0),
+          label: Text(
+            'Ver más proyectos',
+            style: TextStyle(color: AppColors.blank, fontSize: 20.0)
+          )
+        ),
+    
+      ],
     );
   }
 
@@ -118,11 +98,18 @@ class _ProjectIconTitle extends StatelessWidget {
       spacing: 7.0,
       children: [
     
-        Image.asset(
-          project.iconPath,
-          fit: BoxFit.cover,
-          height: 40.0,
+        if (project.iconPath.isNotEmpty)
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5.6),
+          child: Image.asset(
+            project.iconPath,
+            fit: BoxFit.cover,
+            height: 40.0,
+          ),
         ),
+
+        if (project.iconPath.isEmpty)
+        FlutterLogo(size: 40.0),
     
         Expanded(
           child: FittedBox(
@@ -182,6 +169,63 @@ class _TechnologiesViewer extends StatelessWidget {
         );
 
       }).toList(),
+    );
+  }
+
+}
+
+class _ExternalButtons extends StatelessWidget {
+  
+  final String sourceUrl;
+  final String videoUrl;
+
+  const _ExternalButtons({
+    this.sourceUrl = '',
+    this.videoUrl = '',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 10.0,
+      children: [
+
+        if (sourceUrl.isNotEmpty)
+        FilledButton.icon(
+          onPressed: () => _launch(sourceUrl), 
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(AppColors.dark),
+          ),
+          icon: SvgPicture.asset(
+            'assets/icons/github.svg',
+            width: 20.0,
+            height: 20.0,
+          ),
+          label: Text('Código fuente', style: TextStyle(color: AppColors.blank)),
+        ),
+
+        if (videoUrl.isNotEmpty)
+        FilledButton.icon(
+          onPressed: () => _launch(videoUrl), 
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(AppColors.blank),
+          ),
+          icon: SvgPicture.asset(
+            'assets/icons/youtube.svg',
+            width: 20.0,
+            height: 20.0,
+          ),
+          label: Text('Ver demo', style: TextStyle(color: AppColors.dark)),
+        ),
+
+      ],
+    );
+  }
+  
+  Future<void> _launch(String url, {bool isNewTab = true}) async {
+    await launchUrl(
+      Uri.parse(url),
+      webOnlyWindowName: isNewTab ? '_blank' : '_self',
     );
   }
 

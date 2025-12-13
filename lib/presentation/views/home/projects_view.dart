@@ -20,7 +20,7 @@ class ProjectsView extends ConsumerWidget {
         return _CardTable(proyecto: proyecto);
       },
       onAcceptWithDetails: (details) {
-        ref.read(projectProvider.notifier).state = details.data;
+        ref.read(projectProvider.notifier).selectProject(details.data);
       },
     );
   }
@@ -37,7 +37,7 @@ class _CardTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final selectedProject = ref.watch(projectProvider);
+    final selectedProject = ref.watch(projectProvider.select((state) => state.project));
     final size = MediaQuery.of(context).size;
 
     return Container(

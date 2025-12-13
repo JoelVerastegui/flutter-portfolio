@@ -1,6 +1,8 @@
-enum Technologic { flutter, riverpod, isarDB }
+import 'package:equatable/equatable.dart';
 
-class Project {
+enum Technologic { flutter, riverpod, isarDB, dart, docker, git, github, mysql, youtube }
+
+class Project extends Equatable {
 
   final String title;
   final String shortDescription;
@@ -10,6 +12,7 @@ class Project {
   final List<String> assets;
   final List<Technologic> technologies;
   final String sourceUrl;
+  final String videoUrl;
 
   const Project({
     required this.title,
@@ -20,6 +23,7 @@ class Project {
     this.assets = const [],
     this.technologies = const [], 
     this.sourceUrl = '',
+    this.videoUrl = '',
   });
 
   Project copyWith({
@@ -31,6 +35,7 @@ class Project {
     List<String>? assets,
     List<Technologic>? technologies,
     String? sourceUrl,
+    String? videoUrl,
   }) => Project(
     title: title ?? this.title,
     shortDescription: shortDescription ?? this.shortDescription,
@@ -40,6 +45,10 @@ class Project {
     assets: assets ?? this.assets,
     technologies: technologies ?? this.technologies,
     sourceUrl: sourceUrl ?? this.sourceUrl,
+    videoUrl: videoUrl ?? this.videoUrl,
   );
+  
+  @override
+  List<Object?> get props => [ title, shortDescription, description, keyPoints, iconPath, assets, technologies, sourceUrl, videoUrl ];
 
 }

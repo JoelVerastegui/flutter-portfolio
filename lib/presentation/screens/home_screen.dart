@@ -4,12 +4,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:my_portfolio/config/constants/app_colors.dart';
-import 'package:my_portfolio/domain/entities/project.dart';
 import 'package:my_portfolio/presentation/providers/project_provider.dart';
 import 'package:my_portfolio/presentation/views/home/formation_view.dart';
 import 'package:my_portfolio/presentation/views/home/projects_view.dart';
 import 'package:my_portfolio/presentation/views/home/welcome_view.dart';
-import 'package:my_portfolio/presentation/widgets/card_item.dart';
+import 'package:my_portfolio/presentation/widgets/project_navigation_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
 
@@ -34,10 +33,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateLimits();
-    });
-
     scrollController.addListener(() {
       if (scrollController.position.pixels > 300) {
         if (!isButtonUpVisible) setState(() => isButtonUpVisible = true);
@@ -57,6 +52,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
       }
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateLimits();
+    });
+
   }
 
   @override
@@ -67,21 +67,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedProject = ref.watch(projectProvider);
+    final selectedProject = ref.watch(projectProvider.select((state) => state.project));
     final isPhoneDevice = MediaQuery.of(context).size.shortestSide < 600;
 
     return Scaffold(
       floatingActionButton: isButtonUpVisible 
-      ? FloatingActionButton(
-        onPressed: _scrollToTop, 
-        tooltip: 'Volver a Inicio',
-        shape: CircleBorder(),
-        backgroundColor: AppColors.dark,
-        foregroundColor: AppColors.blank,
-        child: Icon(Icons.keyboard_arrow_up, size: 40.0),
-      )
-      .zoomIn() 
-      : null,
+        ? FloatingActionButton(
+          onPressed: _scrollToTop, 
+          tooltip: 'Volver a Inicio',
+          shape: CircleBorder(),
+          backgroundColor: AppColors.dark,
+          foregroundColor: AppColors.blank,
+          child: Icon(Icons.keyboard_arrow_up, size: 40.0),
+        )
+        .zoomIn() 
+        : null,
       body: Stack(
         children: [
       
@@ -104,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             left: 0,
             right: 0,
             bottom: -315.0,
-            child: _ProjectNavigationBar()
+            child: ProjectNavigationBar()
               .moveTo(
                 animate: areCardsVisible,
                 duration: const Duration(milliseconds: 250),
@@ -122,6 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 : 215.0,
               ),
           ),
+          
         ]
       )
     );
@@ -150,72 +151,3 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
 }
-
-class _ProjectNavigationBar extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 315.0,
-      child: Center(
-        child: ListView.separated(
-          physics: BouncingScrollPhysics(),
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemCount: 3,
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          separatorBuilder: (_, _) => SizedBox(width: 15.0),
-          itemBuilder: (context, index) => _ProjectCard(index),
-        ),
-      ),
-    );
-  }
-
-}
-
-class _ProjectCard extends StatefulWidget {
-
-  final int index;
-
-  const _ProjectCard(this.index);
-
-  @override
-  State<_ProjectCard> createState() => _ProjectCardState();
-}
-
-class _ProjectCardState extends State<_ProjectCard> {
-
-  int hoverIndex = -1;
-
-  @override
-  Widget build(BuildContext context) {
-    final index = widget.index;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => hoverIndex = index),
-      onExit: (_) => setState(() => hoverIndex = -1),
-      child: LongPressDraggable<Project>(
-        data: Project(
-          title: 'Ponte al dia',
-          description: 'App móvil de agenda escolar.',
-          iconPath: '', 
-          shortDescription: '', 
-          keyPoints: '', 
-          sourceUrl: '',
-        ),
-        delay: const Duration(milliseconds: 100),
-        feedback: Material(color: Colors.transparent, child: CardItem(index: index)),
-        child: CardItem(index: index)
-          .moveTo(
-            animate: hoverIndex == index,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.linear,
-            top: 100.0,
-          )
-      ),
-    );
-  }
-  
-}
-
