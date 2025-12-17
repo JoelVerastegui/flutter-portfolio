@@ -9,7 +9,8 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.dark,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.transparent,
-    )
+    ),
+    fontFamily: 'DMSans',
   );
 
 }

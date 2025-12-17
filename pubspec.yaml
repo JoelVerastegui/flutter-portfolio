@@ -30,3 +30,12 @@ flutter:
     - assets/images/
     - assets/images/projects/
     - assets/icons/
+
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: fonts/DMSans-Regular.ttf
+        - asset: fonts/DMSans-Italic.ttf
+          style: italic
+        - asset: fonts/DMSans-Bold.ttf
+          weight: 700
