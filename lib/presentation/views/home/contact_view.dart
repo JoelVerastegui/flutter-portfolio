@@ -22,6 +22,7 @@ class ContactView extends StatelessWidget {
       ),
       child: Container(
         width: size.width,
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -36,13 +37,15 @@ class ContactView extends StatelessWidget {
           children: [
 
             Text(
-              '¿Tienes algo en mente?', 
-              style: textStyle.displayMedium?.copyWith(color: AppColors.blank)
+              '¿Buscas a alguien para sumarse a tu equipo?', 
+              style: textStyle.displayMedium?.copyWith(color: AppColors.blank),
+              textAlign: TextAlign.center,
             ),
 
             Text(
-              'Envíame un mensaje en LinkedIn o un correo directo y conversemos sobre tu proyecto.', 
-              style: textStyle.headlineSmall?.copyWith(color: AppColors.blank)
+              'Envíame un mensaje en LinkedIn o un correo directo y conversemos.', 
+              style: textStyle.headlineSmall?.copyWith(color: AppColors.blank),
+              textAlign: TextAlign.center,
             ),
 
             _ContactButtons(),
@@ -61,11 +64,12 @@ class _ContactButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
       spacing: 15.0,
+      runSpacing: 15.0,
       children: [
-
+    
         FilledButton.icon(
           onPressed: () => launch(
             'https://www.linkedin.com/in/joelverastegui/',
@@ -81,9 +85,9 @@ class _ContactButtons extends StatelessWidget {
             colorMapper: _LinkedinColorMapper(),
           ),
         ),
-
+    
         _EmailButton(),
-
+    
       ],
     );
   }
@@ -139,10 +143,11 @@ class _EmailButtonState extends State<_EmailButton> {
     return ClipRRect(
       borderRadius: BorderRadiusGeometry.circular(20.0),
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: _launchMailto,
         padding: EdgeInsets.zero,
         color: AppColors.dark,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
                           
@@ -220,22 +225,22 @@ class _EmailButtonState extends State<_EmailButton> {
     );
   }
 
-  // Future<void> _launchMailto() async {
-  //   final Uri emailLaunchUri = Uri(
-  //     scheme: 'mailto',
-  //     path: 'example@example.com',
-  //     queryParameters: {
-  //       'subject': 'Example Subject', // Email subject
-  //       'body': 'Example Body' // Email body
-  //     },
-  //   );
+  Future<void> _launchMailto() async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'jverasteguixyz@gmail.com',
+      queryParameters: {
+        'subject': 'Contacto como desarrollador Flutter',
+        'body': ''
+      },
+    );
 
-  //   // Check if the URL can be launched and then launch it
-  //   if (!await launchUrl(emailLaunchUri)) {
-  //     // Handle error: e.g., show a snackbar or log an error message
-  //     throw Exception('Could not launch $emailLaunchUri');
-  //   }
-  // }
+    final url = emailLaunchUri.toString().replaceAll('+', '%20');
+
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $emailLaunchUri');
+    }
+  }
 
 }
 
