@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:my_portfolio/config/constants/app_colors.dart';
 import 'package:my_portfolio/presentation/providers/project_provider.dart';
-import 'package:my_portfolio/presentation/views/home/about_view.dart';
-import 'package:my_portfolio/presentation/views/home/contact_view.dart';
-import 'package:my_portfolio/presentation/views/home/projects_view.dart';
-import 'package:my_portfolio/presentation/views/home/welcome_view.dart';
+import 'package:my_portfolio/presentation/views/about_view.dart';
+import 'package:my_portfolio/presentation/views/contact_view.dart';
+import 'package:my_portfolio/presentation/views/projects_view.dart';
+import 'package:my_portfolio/presentation/views/welcome_view.dart';
 import 'package:my_portfolio/presentation/widgets/project_navigation_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -17,6 +17,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
+
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
@@ -57,7 +58,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateLimits();
     });
-
   }
 
   @override

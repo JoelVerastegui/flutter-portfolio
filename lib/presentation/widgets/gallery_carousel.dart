@@ -16,6 +16,7 @@ class GalleryCarousel extends StatefulWidget {
 
   @override
   State<GalleryCarousel> createState() => GalleryCarouselState();
+  
 }
 
 class GalleryCarouselState extends State<GalleryCarousel> {
@@ -29,7 +30,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
   void initState() {
     super.initState();
 
-    _galleryCarousel();
+    _resumeCarousel();
   }
 
   @override
@@ -126,7 +127,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
     }
   }
 
-  void _galleryCarousel() {
+  void _resumeCarousel() {
     if (widget.assetsPaths.isEmpty) return;
 
     carouselTimer = Timer.periodic(const Duration(seconds: 5), (_) {
@@ -142,7 +143,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
 
     continueCarouselTimer = Timer(const Duration(seconds: 10), () {
       _nextAsset();
-      _galleryCarousel();
+      _resumeCarousel();
     });
   }
 
@@ -171,7 +172,7 @@ class _AssetViewer extends StatelessWidget {
             filterQuality: FilterQuality.high,
             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
               if (frame == null) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(color: AppColors.blank));
               }
 
               return child;
@@ -203,28 +204,24 @@ class _AssetCarouselItem extends StatelessWidget {
       child: Container(
         width: 50.0,
         decoration: BoxDecoration(
+          color: AppColors.dark,
           border: isAssetSelected
             ? Border.all(color: AppColors.blank, width: 2.0)
             : null
         ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: AppColors.dark,
-          ),
-          child: AspectRatio(
-            aspectRatio: 9 / 16,
-            child: Image.asset(
-              assetUrl,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.low,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (frame == null) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                
-                return child;
-              },
-            ),
+        child: AspectRatio(
+          aspectRatio: 9 / 16,
+          child: Image.asset(
+            assetUrl,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.low,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              if (frame == null) {
+                return Center(child: CircularProgressIndicator(color: AppColors.blank));
+              }
+              
+              return child;
+            },
           ),
         ),
       ),

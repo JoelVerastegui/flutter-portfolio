@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:my_portfolio/config/router/app_router.dart';
@@ -9,6 +10,7 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
+  
   const MainApp({super.key});
 
   @override
@@ -19,4 +21,5 @@ class MainApp extends StatelessWidget {
       theme: AppTheme().getTheme()
     );
   }
+
 }

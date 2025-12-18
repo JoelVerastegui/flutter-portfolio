@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:my_portfolio/config/constants/app_colors.dart';
 
 class AppTheme {
@@ -7,9 +8,6 @@ class AppTheme {
     useMaterial3: true,
     colorSchemeSeed: AppColors.primary,
     scaffoldBackgroundColor: AppColors.dark,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.transparent,
-    ),
     fontFamily: 'DMSans',
   );
 

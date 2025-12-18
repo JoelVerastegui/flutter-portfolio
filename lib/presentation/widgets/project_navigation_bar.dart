@@ -47,6 +47,7 @@ class _ProjectCard extends StatefulWidget {
 
   @override
   State<_ProjectCard> createState() => _ProjectCardState();
+  
 }
 
 class _ProjectCardState extends State<_ProjectCard> {

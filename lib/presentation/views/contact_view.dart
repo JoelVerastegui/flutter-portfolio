@@ -1,11 +1,11 @@
 import 'dart:async';
-
-import 'package:my_portfolio/config/constants/app_colors.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:my_portfolio/config/constants/app_colors.dart';
 
 class ContactView extends StatelessWidget {
 
@@ -15,6 +15,13 @@ class ContactView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textStyle = Theme.of(context).textTheme;
+    final bgImage = BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/mt-fuji.jpeg'),
+        fit: BoxFit.cover,
+        colorFilter: ColorFilter.mode(Colors.black45, BlendMode.srcOver),
+      )
+    );
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -24,13 +31,7 @@ class ContactView extends StatelessWidget {
         width: size.width,
         padding: EdgeInsets.symmetric(horizontal: 15.0),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/mt-fuji.jpeg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black45, BlendMode.srcOver),
-          )
-        ),
+        decoration: bgImage,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 15.0,

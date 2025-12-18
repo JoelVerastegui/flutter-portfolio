@@ -46,6 +46,7 @@ class CardItem extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class _ContentContainer extends StatelessWidget {
@@ -56,6 +57,8 @@ class _ContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.0),
       child: Column(
@@ -94,7 +97,7 @@ class _ContentContainer extends StatelessWidget {
       
           Text(
             project.shortDescription,
-            style: TextStyle(color: AppColors.dark),
+            style: textStyle.titleSmall?.copyWith(color: AppColors.dark),
             textAlign: TextAlign.center,
             maxLines: 3,
           ),

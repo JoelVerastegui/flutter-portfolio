@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_portfolio/config/constants/app_colors.dart';
 
+import 'package:my_portfolio/config/constants/app_colors.dart';
+import 'package:my_portfolio/presentation/providers/project_provider.dart';
 import 'package:my_portfolio/presentation/widgets/gallery_carousel.dart';
 import 'package:my_portfolio/presentation/widgets/project_info.dart';
-import 'package:my_portfolio/presentation/providers/project_provider.dart';
 
 class ProjectView extends ConsumerWidget {
 
@@ -78,7 +78,6 @@ class ProjectView extends ConsumerWidget {
             ),
           ),
         );
-
       },
     );
   }

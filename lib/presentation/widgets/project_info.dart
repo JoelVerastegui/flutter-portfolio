@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:my_portfolio/config/constants/app_colors.dart';
 import 'package:my_portfolio/domain/entities/project.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProjectInfo extends StatelessWidget {
 
@@ -17,6 +19,8 @@ class ProjectInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10.0,
@@ -26,20 +30,20 @@ class ProjectInfo extends StatelessWidget {
     
         Text(
           project.shortDescription,
-          style: TextStyle(color: AppColors.blank, fontSize: 16.0),
+          style: textStyle.titleMedium?.copyWith(color: AppColors.blank),
         ),
     
         if (project.description.isNotEmpty)
         Text(
           project.description,
-          style: TextStyle(color: AppColors.blank, fontSize: 16.0),
+          style: textStyle.titleMedium?.copyWith(color: AppColors.blank),
         ),
     
         SizedBox(height: 5.0),
     
         Text(
           'Tecnologías usadas',
-          style: TextStyle(color: AppColors.blank, fontSize: 20.0),
+          style: textStyle.titleLarge?.copyWith(color: AppColors.blank),
         ),
     
         _TechnologiesViewer(project.technologies),
@@ -50,12 +54,12 @@ class ProjectInfo extends StatelessWidget {
     
           Text(
             'Puntos clave',
-            style: TextStyle(color: AppColors.blank, fontSize: 20.0),
+            style: textStyle.titleLarge?.copyWith(color: AppColors.blank),
           ),
     
           Text(
             project.keyPoints,
-            style: TextStyle(color: AppColors.blank, fontSize: 16.0),
+            style: textStyle.titleMedium?.copyWith(color: AppColors.blank),
           ),
         ],
     
@@ -74,7 +78,7 @@ class ProjectInfo extends StatelessWidget {
           icon: Icon(Icons.style, color: AppColors.blank, size: 20.0),
           label: Text(
             'Ver más proyectos',
-            style: TextStyle(color: AppColors.blank, fontSize: 20.0)
+            style: textStyle.titleLarge?.copyWith(color: AppColors.blank),
           )
         ),
     
@@ -94,6 +98,8 @@ class _ProjectIconTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
     return Row(
       spacing: 7.0,
       children: [
@@ -117,7 +123,7 @@ class _ProjectIconTitle extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               project.title,
-              style: TextStyle(color: AppColors.blank, fontSize: 30.0),
+              style: textStyle.headlineLarge?.copyWith(color: AppColors.blank),
             ),
           ),
         ),
@@ -136,6 +142,8 @@ class _TechnologiesViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
     return Wrap(
       spacing: 15.0,
       runSpacing: 15.0,
@@ -162,7 +170,7 @@ class _TechnologiesViewer extends StatelessWidget {
     
             Text(
               technologicName,
-              style: TextStyle(color: AppColors.blank, fontSize: 8.0),
+              style: textStyle.labelSmall?.copyWith(color: AppColors.blank),
             ),
     
           ],
@@ -186,6 +194,8 @@ class _ExternalButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
     return Row(
       spacing: 10.0,
       children: [
@@ -201,7 +211,7 @@ class _ExternalButtons extends StatelessWidget {
             width: 20.0,
             height: 20.0,
           ),
-          label: Text('Código fuente', style: TextStyle(color: AppColors.blank)),
+          label: Text('Código fuente', style: textStyle.titleSmall?.copyWith(color: AppColors.blank)),
         ),
 
         if (videoUrl.isNotEmpty)
@@ -215,7 +225,7 @@ class _ExternalButtons extends StatelessWidget {
             width: 20.0,
             height: 20.0,
           ),
-          label: Text('Ver demo', style: TextStyle(color: AppColors.dark)),
+          label: Text('Ver demo', style: textStyle.titleSmall?.copyWith(color: AppColors.dark)),
         ),
 
       ],
