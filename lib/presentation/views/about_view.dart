@@ -114,8 +114,9 @@ Valoro mucho la organización estructurada, el cumplimiento de las mejores prác
         children: [
 
           Text(
-            '¿Quién soy?', 
-            style: textStyle.headlineMedium?.copyWith(color: AppColors.blank)
+            'Mi enfoque como programador', 
+            style: textStyle.headlineMedium?.copyWith(color: AppColors.blank),
+            textAlign: TextAlign.center,
           ),
 
           Text(

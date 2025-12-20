@@ -14,6 +14,7 @@ class ProjectView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final project = ref.watch(projectProvider.select((state) => state.project));
+    final currentPosition = ref.watch(projectProvider.select((state) => state.currentPosition));
     final isFirstProject = ref.watch(projectProvider.select((state) => state.isFirst));
     final isLastProject = ref.watch(projectProvider.select((state) => state.isLast));
     final projectNotifier = ref.read(projectProvider.notifier);
@@ -49,7 +50,7 @@ class ProjectView extends ConsumerWidget {
                 ),
             
                 if (project.assets.isNotEmpty)
-                GalleryCarousel(assetsPaths: project.assets, maxHeight: constraints.maxHeight,),
+                GalleryCarousel(assetsPaths: project.assets, maxHeight: constraints.maxHeight, projectIndex: currentPosition),
                 
                 if (constraints.maxWidth > responsiveWidth)
                 Expanded(

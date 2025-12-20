@@ -7,11 +7,13 @@ class GalleryCarousel extends StatefulWidget {
 
   final List<String> assetsPaths;
   final double maxHeight;
+  final int projectIndex;
 
   const GalleryCarousel({
     super.key,
     required this.assetsPaths,
     required this.maxHeight,
+    this.projectIndex = -1,
   });
 
   @override
@@ -25,6 +27,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
   Timer? carouselTimer;
   Timer? continueCarouselTimer;
   int selectedIndex = 0;
+  Map<int, List<String>> precachedImages = {};
 
   @override
   void initState() {
@@ -34,14 +37,27 @@ class GalleryCarouselState extends State<GalleryCarousel> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    
-    for(final assetPath in widget.assetsPaths) {
-      precacheImage(
-        AssetImage(assetPath), 
-        context
-      );
+  void didUpdateWidget(covariant GalleryCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.projectIndex != widget.projectIndex) {
+      carouselTimer?.cancel();
+
+      continueCarouselTimer?.cancel();
+
+      if (!precachedImages.containsKey(widget.projectIndex)) {
+        for (final assetPath in widget.assetsPaths) {
+          precacheImage(AssetImage(assetPath), context);
+        }
+
+        precachedImages[widget.projectIndex] = widget.assetsPaths;
+      }
+
+      setState(() => selectedIndex = 0);
+
+      _ensureItemIsVisible();
+
+      _resumeCarousel();
     }
   }
 
@@ -169,6 +185,7 @@ class _AssetViewer extends StatelessWidget {
             image: AssetImage(assetUrl),
             key: ValueKey<String>('asset:$assetUrl'),
             fit: BoxFit.cover,
+            gaplessPlayback: true,
             filterQuality: FilterQuality.high,
             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
               if (frame == null) {

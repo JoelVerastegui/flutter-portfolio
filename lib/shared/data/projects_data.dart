@@ -45,6 +45,15 @@ final List<Map<String, dynamic>> projectsData = [
 - Implementación de reproductor de Youtube.''',
     'iconPath': 'assets/images/projects/cinemapedia_icon.png',
     'assets': [
+      'assets/images/projects/cinemapedia_1.jpg',
+      'assets/images/projects/cinemapedia_2.jpg',
+      'assets/images/projects/cinemapedia_3.jpg',
+      'assets/images/projects/cinemapedia_4.jpg',
+      'assets/images/projects/cinemapedia_5.jpg',
+      'assets/images/projects/cinemapedia_6.jpg',
+      'assets/images/projects/cinemapedia_7.jpg',
+      'assets/images/projects/cinemapedia_8.jpg',
+      'assets/images/projects/cinemapedia_9.jpg',
     ],
     'technologies': [
       'flutter',
@@ -55,10 +64,10 @@ final List<Map<String, dynamic>> projectsData = [
       'github',
     ],
     'sourceUrl': 'https://github.com/JoelVerastegui/cinemapedia/tree/master',
-    'videoUrl': '',
+    'videoUrl': 'https://www.youtube.com/watch?v=My-61gf2ggU',
   },
   {
-    'title': 'Teslo App',
+    'title': 'Teslo Shop',
     'shortDescription': 'Gestor de tienda de ropa con autenticación JWT y acceso a cámara.',
     'description': 'Login y registro de usuarios mediante JWT. Listado de productos y formulario de registro con acceso a la cámara y galería de fotos para su almacenamiento en el servidor.',
     'keyPoints': '''
@@ -68,8 +77,16 @@ final List<Map<String, dynamic>> projectsData = [
 - Conexión a backend privado mediante REST API usando dio.
 - Autenticación JWT con protección de rutas usando go_router.
 - Permisos de acceso a la cámara y galería de fotos.''',
-    'iconPath': '',
+    'iconPath': 'assets/images/projects/teslo_shop_icon.png',
     'assets': [
+      'assets/images/projects/teslo_shop_1.jpg',
+      'assets/images/projects/teslo_shop_2.jpg',
+      'assets/images/projects/teslo_shop_3.jpg',
+      'assets/images/projects/teslo_shop_4.jpg',
+      'assets/images/projects/teslo_shop_5.jpg',
+      'assets/images/projects/teslo_shop_6.jpg',
+      'assets/images/projects/teslo_shop_7.jpg',
+      'assets/images/projects/teslo_shop_8.jpg',
     ],
     'technologies': [
       'flutter',
@@ -80,6 +97,6 @@ final List<Map<String, dynamic>> projectsData = [
       'github',
     ],
     'sourceUrl': 'https://github.com/JoelVerastegui/teslo_app/tree/master',
-    'videoUrl': '',
+    'videoUrl': 'https://www.youtube.com/watch?v=Ktyg9u2cTjM',
   },
 ];
